@@ -1,0 +1,85 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Fixed viewport height */
+}
+
+.header {
+    height: 10vh; /* Fixed height */
+    background-color: var(--dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.header h1 {
+    color: white;
+}
+
+.main {
+    flex: 1; /* Take up remaining space */
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    overflow-y: auto; /* Make scrollable */
+}
+
+.main h2 {
+    color: black;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.footer {
+    height: 10vh; /* Fixed height */
+    background-color: var(--dark);
+    flex-shrink: 0; /* Prevent shrinking */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-content span {
+    padding-left: .5rem;
+}
+
+button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 1rem;
+}
+
+/* for desktop hover */
+button:hover {
+    background-color: var(--secondary);
+    transform: translateY(-2px);
+}
+
+/* for when mobile holds button */
+button:active {
+    background-color: var(--secondary);
+    transform: translateY(0);
+}
+
+/* buttons get bigger for wider */
+@media (min-width: 768px) {
+    button {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+}
