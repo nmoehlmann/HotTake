@@ -3,10 +3,17 @@ import { useNavigate } from "react-router-dom"
 import { FaPlus, FaUser } from 'react-icons/fa'
 import '../styles/HomePage.css'
 import '../styles/BaseStyles.css'
+import { currentUser } from "../GlobalState"
 
+// model imports
+import User from '../models/User'
+
+// component imports
 import DebateCard from '../components/DebateCard'
 
 function HomePage() {
+    const navigate = useNavigate() // setup navigate
+
     // mock data
     const [debates, setDebates] = useState([
         {

@@ -1,0 +1,98 @@
+header {
+    height: 10vh;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    height: 10vh;
+}
+
+.back-btn {
+    border: none;
+    border-radius: 12px;
+    width: 5rem;
+    height: 4rem;
+    background-color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    align-items: space-between;
+    height: 100%;
+    padding: 1rem;
+}
+
+.profile-form div {
+    margin-bottom: 1rem;
+}
+
+.male-btn {
+    background-color: darkblue;
+}
+
+.female-btn {
+    background-color: plum;
+}
+
+.other-btn {
+    background-color: purple;
+}
+
+.gender-inp {
+    display: flex;
+    justify-content: space-around;
+}
+
+.gender-inp button {
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+    font-size: .75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    border: none;
+}
+
+.gender-inp h2 {
+    margin: 0;
+    padding: 0;
+}
+
+.male-icon {
+    font-size: 1.5rem;
+}
+
+.female-icon {
+    font-size: 1.5rem;
+}
+
+.other-icon {
+    font-size: 1.5rem;
+}
+
+.profile-form input {
+    border: none;
+    border-bottom: 4px solid var(--primary);
+    font-size: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.profile-form input:focus {
+    border: none;
+    border-bottom: 6px solid var(--secondary)
+}

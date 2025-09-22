@@ -51,7 +51,7 @@
     padding-left: .5rem;
 }
 
-button {
+.profile-btn, .create-btn {
     background-color: var(--primary);
     color: white;
     border: none;
@@ -65,13 +65,23 @@ button {
 }
 
 /* for desktop hover */
-button:hover {
+.create-btn:hover {
+    background-color: var(--secondary);
+    transform: translateY(-2px);
+}
+
+.profile-btn:hover {
     background-color: var(--secondary);
     transform: translateY(-2px);
 }
 
 /* for when mobile holds button */
-button:active {
+.create-btn:active {
+    background-color: var(--secondary);
+    transform: translateY(0);
+}
+
+.profile-btn:active {
     background-color: var(--secondary);
     transform: translateY(0);
 }
