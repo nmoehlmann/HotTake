@@ -4,45 +4,38 @@ import { FaPlus, FaUser } from 'react-icons/fa'
 import '../styles/HomePage.css'
 import '../styles/BaseStyles.css'
 import { currentUser } from "../GlobalState"
+import { allDebates } from "../GlobalState"
 
 // model imports
 import User from '../models/User'
 
 // component imports
 import DebateCard from '../components/DebateCard'
+import ConfirmationModal from '../components/ConfirmationModal'
 
 function HomePage() {
     const navigate = useNavigate() // setup navigate
 
-    // mock data
-    const [debates, setDebates] = useState([
-        {
-            id: 1,
-            title: "dark souls II is a bad game",
-            participantCount: 12,
-        },
-        {
-            id: 2,
-            title: "universal basic income: good or bad?",
-            participantCount: 0,
-        },
-        {
-            id: 3,
-            title: "climate change policy debate",
-            participantCount: 15,
-        },
-        {
-            id: 4,
-            title: "remote work vs office work",
-            participantCount: 6
-        },
-        {
-            id: 5,
-            title: "squidward vs spongebob vs plankton vs krabs who will win?",
-            participantCount: 2
-        }
-    ])
+    // modal state
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [selectedDebate, setSelectedDebate] = useState(null)
 
+    const handleDebateClick = (debate) => {
+        setSelectedDebate(debate)
+        setIsModalOpen(true)
+    }
+
+    const handleJoinDebate = () => {
+        console.log(`joining debate ${selectedDebate.title}`)
+        navigate(`/debate/${selectedDebate.id}`)
+        setIsModalOpen(false)
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false)
+        setSelectedDebate(null)
+    }
+    
     return (
         <div className="container">
             <header className="header">
@@ -50,13 +43,13 @@ function HomePage() {
             </header>
             <main className="main">
                 <div className="debates-list">
-                    {debates.map(debate => (
-                        <DebateCard
-                            title={debate.title}
-                            participantCount={debate.participantCount}
-                            key={debate.id}
-                        />
-                    ))}
+                    {allDebates.map(debate => (
+                        <div key={debate.id} onClick={() => {handleDebateClick(debate)}}>
+                            <DebateCard
+                                title={debate.title}
+                                participantCount={debate.participantCount}
+                            />
+                        </div>))}
                 </div>
             </main>
             <footer className="footer">
@@ -73,6 +66,14 @@ function HomePage() {
                     </div>
                 </button>
             </footer>
+
+            {/* confirmation modal */}
+            <ConfirmationModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                debate={selectedDebate}
+                onConfirm={handleJoinDebate}
+            />
         </div>
     )
 }

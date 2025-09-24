@@ -1,20 +1,29 @@
-header {
-    height: 10vh;
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: hidden;
 }
 
-.header-container {
+.profile-header-container {
+    height: 10vh;
+    flex-shrink: 0;
+}
+
+.profile-header-section {
     display: flex;
     align-items: center;
     gap: 1rem;
     padding: 1rem;
 }
 
-main {
+.profile-main-container {
     flex: 1;
+    overflow-y: auto; /* main content can scroll */
 }
 
-footer {
-    height: 10vh;
+.profile-footer-container {
+    height: 12vh;
 }
 
 .back-btn {
@@ -38,25 +47,13 @@ footer {
     margin-bottom: 1rem;
 }
 
-.male-btn {
-    background-color: darkblue;
-}
-
-.female-btn {
-    background-color: plum;
-}
-
-.other-btn {
-    background-color: purple;
-}
-
 .gender-inp {
     display: flex;
     justify-content: space-around;
 }
 
 .gender-inp button {
-    border-radius: 50%;
+    border-radius: 15px;
     height: 100px;
     width: 100px;
     font-size: .75rem;
@@ -68,21 +65,19 @@ footer {
     border: none;
 }
 
+.profile-form h1 {
+    color: #333;
+}
+
 .gender-inp h2 {
     margin: 0;
     padding: 0;
 }
 
-.male-icon {
+/* Icons */
+.male-icon, .female-icon, .other-icon {
     font-size: 1.5rem;
-}
-
-.female-icon {
-    font-size: 1.5rem;
-}
-
-.other-icon {
-    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .profile-form input {
@@ -93,6 +88,96 @@ footer {
 }
 
 .profile-form input:focus {
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    border-bottom: 6px solid var(--secondary);
+    transform: translateY(-2px);
+}
+
+.male-btn {
+    background-color: darkblue;
+    filter: grayscale(75%)
+}
+
+.female-btn {
+    background-color: plum;
+    filter: grayscale(75%)
+}
+
+.other-btn {
+    background-color: purple;
+    filter: grayscale(75%)
+}
+
+/* Selected states - only when active */ 
+.gender-inp button.selected.male-btn {
+    background-color: #4a90e2;
+    color: white;
+    filter: grayscale(0%);
+    opacity: 1;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.gender-inp button.selected.female-btn {
+    background-color: #e24a90;
+    color: white;
+    filter: grayscale(0%);
+    opacity: 1;
+    box-shadow: 0 4px 12px rgba(226, 74, 144, 0.3);
+}
+
+.gender-inp button.selected.other-btn {
+    background-color: #9b4ae2;
+    color: white;
+    filter: grayscale(0%);
+    opacity: 1;
+    box-shadow: 0 4px 12px rgba(155, 74, 226, 0.3);
+}
+
+/* Active/pressed effect */
+.gender-inp button:active {
+    transform: scale(0.95);
+}
+
+/* Hover effects */
+.gender-inp button:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.discard-btn, .save-btn {
     border: none;
-    border-bottom: 6px solid var(--secondary)
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+    font-size: 1.2rem;
+}
+
+.discard-btn {
+    background-color: maroon;
+    color: whitesmoke;
+}
+
+.save-btn {
+    background-color: darkgreen;
+    color: whitesmoke;
+}
+
+.btn-label {
+    padding: 0;
+    margin: 0;
+}
+
+.footer-options {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
+
+.footer-options button:active {
+    transform: scale(.95);
+}
+
+.footer-options button:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
 }

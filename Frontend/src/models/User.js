@@ -1,8 +1,8 @@
 class User {
     constructor(data) {
-        this.name = data.name
-        this.age = data.age
-        this.gender = data.gender
+        this.name = data.name | null
+        this.age = data.age | null
+        this.gender = data.gender | null
     }
 }
 

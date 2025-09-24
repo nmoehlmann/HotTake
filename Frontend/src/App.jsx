@@ -17,7 +17,7 @@ function App() {
           <Route path="/" element={<HomePage />}/>
 
           {/* debate page */}
-          <Route path="/debate" element={<DebatePage />}/>
+          <Route path="/debate/:debateId" element={<DebatePage />}/>
 
           {/* profile page */}
           <Route path="/profile" element={<EditProfilePage />}/>
