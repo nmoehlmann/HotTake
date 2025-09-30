@@ -36,8 +36,30 @@ function EditProfilePage() {
     }
 
     const handleSave = () => {
+        // checks name
+        if (!formData.name || formData.name.trim() === '') {
+            alert('Name is required')
+            return
+        }
+
+        // validate age if provided
+        if (formData.age && formData.age !== '') {
+            const ageNumber = parseInt(formData.age)
+            if (isNaN(ageNumber) || ageNumber < 0 || ageNumber > 150) {
+                alert('Age must be a valid number between 0 and 150')
+                return
+            }
+        }
+
+        // convert empty strings to null for save
+        const saveData = {
+            name: formData.name.trim(),
+            age: formData.age && formData.age !== '' ? parseInt(formData.age) : null,
+            gender: formData.gender || null
+        }
+
         // updates the global currentUser with local form data
-        Object.assign(currentUser, formData) // NOTE: cannot directly assign imported object
+        Object.assign(currentUser, saveData) // NOTE: cannot directly assign imported object
         navigate('/')
     }
 
@@ -66,6 +88,7 @@ function EditProfilePage() {
                     <div className="name-inp-container">
                         <h1>Name</h1>
                         <input 
+                            required
                             className="name-inp" 
                             value={formData.name}
                             placeholder="Enter your name"

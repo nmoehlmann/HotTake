@@ -6,7 +6,13 @@ import { useState, useEffect } from 'react'
 function CreateDebatePage() {
     const navigate = useNavigate()
 
-    const [formData, setFormData] = useState()
+    const [formData, setFormData] = useState({
+        title: ''
+    })
+
+    // loading and error states
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState('')
 
     const handleInputChange = (field, value) => {
         setFormData(prev => ({
@@ -16,6 +22,12 @@ function CreateDebatePage() {
     }
 
     const handleSave = () => {
+        // validate data
+        if (!formData.title || formData.trim() === '') {
+            setError('Title is required')
+            return
+        }
+
         // todo: creates a debate in server and navigates to created debate
         navigate('/')
     }

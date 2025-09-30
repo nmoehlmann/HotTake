@@ -20,6 +20,10 @@ function HomePage() {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedDebate, setSelectedDebate] = useState(null)
 
+    // loading and error states
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState('')
+
     const handleDebateClick = (debate) => {
         setSelectedDebate(debate)
         setIsModalOpen(true)
