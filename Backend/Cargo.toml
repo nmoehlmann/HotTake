@@ -5,10 +5,18 @@ edition = "2024"
 
 [dependencies]
 # Web framework
-axum = "0.7"                                          # Handles HTTP requests, routing, JSON parsing
-tokio = { version = "1.0", features = ["full"] }       # Provides async / await support needed for networking
-tower = "0.4"                                         # Middleware for server
-tower-http = { version = "0.5", features = ["cors"] } # Handles CORS
+
+# Handles HTTP requests, routing, JSON parsing
+axum = { version = "0.7", features = ["ws"] }
+
+# Provides async / await support needed for networking
+tokio = { version = "1.0", features = ["full"] }
+
+# Middleware for server
+tower = "0.4"
+
+# Handles CORS
+tower-http = { version = "0.5", features = ["cors"] }
 
 # JSON serialization
 serde = { version = "1.0", features = ["derive"] }
@@ -18,5 +26,9 @@ serde_json = "1.0"
 uuid = { version = "1.0", features = ["v4"] }
 
 # WebSocket support for WEBRTC
-tokio-tungstenite = "0.20"                            # WebSocket implementation
-futures-util = "0.3"                                  # Stream utils for WebSocketf
+
+# WebSocket implementation
+tokio-tungstenite = "0.20"
+
+# Stream utils for WebSocket
+futures-util = "0.3"
