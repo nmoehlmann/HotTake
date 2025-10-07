@@ -64,7 +64,8 @@ struct CreateDebateRequest {
     title: String,
 }
 
-const MAX_PARTICIPANTS: u8 = 6;
+// has to be same type as participant_count for comparison
+const MAX_PARTICIPANTS: u32 = 6;
 
 // App state shared between all requests
 // Regular HashMap wont work because web servers handle many requests simultaneously which becomes a problem because Rust's safety rules prevent sharing mutable data between threads
@@ -163,7 +164,7 @@ async fn create_debate(
         debates_map.insert(id.clone(), debate.clone());
     }
 
-    println!("Created debate: ", debate.title, debate.id);
+    println!("Created debate: {} {}", debate.title, debate.id);
     return Ok(Json(debate));
 }
 
@@ -180,7 +181,7 @@ async fn join_debate(
                 return Err(StatusCode::CONFLICT); // debate is full
             }
             debate.participant_count += 1;
-            println!("User joined debate: ", debate.title, debate.id);
+            println!("User joined debate: {} {}", debate.title, debate.id);
             Ok(Json(debate.clone()))
         }
         None => Err(StatusCode::NOT_FOUND),
@@ -193,7 +194,32 @@ async fn websocket_handler(
     ws: WebSocketUpgrade,
     // impl: allows return of any type that implements (IntoResponse) in this case
 ) -> impl IntoResponse {
-    println!("WebSocket connection request for debate: ", debate_id);
+    println!("WebSocket connection request for debate: {}", debate_id);
 
     // TODO: implement webrtc signaling
+}
+
+fn add_mock_debates(debates: &AppState) {
+    let mut debates_map = debates.lock().unwrap();
+
+    let mock_debates = vec![
+        Debate {
+            id: "1".to_string(),
+            title: "poopy or moopy?".to_string(),
+            participant_count: 2,
+            created_at: chrono::Utc::now().to_rfc3339(),
+            is_active: true,
+        },
+        Debate {
+            id: "2".to_string(),
+            title: "is my weewee too small or no?".to_string(),
+            participant_count: 0,
+            created_at: chrono::Utc::now().to_rfc3339(),
+            is_active: true,
+        },
+    ];
+
+    for debate in mock_debates {
+        debates_map.insert(debate.id.clone(), debate);
+    }
 }
