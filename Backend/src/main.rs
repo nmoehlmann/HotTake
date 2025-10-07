@@ -64,7 +64,13 @@ struct CreateDebateRequest {
     title: String,
 }
 
+const MAX_PARTICIPANTS: u8 = 6;
+
 // App state shared between all requests
+// Regular HashMap wont work because web servers handle many requests simultaneously which becomes a problem because Rust's safety rules prevent sharing mutable data between threads
+
+// Mutex: allows thread-safe access control of debates
+// Arc: allows multiple threads ownership to debates
 type AppState = Arc<Mutex<HashMap<String, Debate>>>;
 
 // "#[]" is called an attribute which gives instructions to the Rust compiler about how to handle the code that follows
@@ -106,4 +112,88 @@ async fn main() {
 
 async fn health_check() -> &'static str {
     "HotTake API is running"
+}
+
+// gets all debates
+
+// directly getting debates doesn't work because Axum does not know where to get debates from
+// Axum is calling this function, which means it needs to know exactly where the params are coming from hence (State(...))
+// State: an Axum extractor struct that tell Axum "get this from the literal stored app state, not from the HTTP request"
+async fn get_debates(State(debates): State<AppState>) -> Json<Vec<Debate>> {
+    let debates_map = debates.lock().unwrap();
+    let debates_list: Vec<Debate> = debates_map.values().cloned().collect();
+    return Json(debates_list);
+}
+
+async fn get_debate(
+    Path(id): Path<String>,
+    State(debates): State<AppState>,
+) -> Result<Json<Debate>, StatusCode> {
+    //lock(): blocks other threads from accessing
+    //unwrap(): lock returns a Result object and unwrap extracts the success value from the Result
+    let debates_map = debates.lock().unwrap();
+    match debates_map.get(&id) {
+        Some(debate) => Ok(Json(debate.clone())),
+        None => Err(StatusCode::NOT_FOUND),
+    }
+}
+
+async fn create_debate(
+    State(debates): State<AppState>,
+    Json(payload): Json<CreateDebateRequest>,
+) -> Result<Json<Debate>, StatusCode> {
+    // validate input first
+    if payload.title.trim().is_empty() {
+        return Err(StatusCode::BAD_REQUEST);
+    }
+
+    // create new debate
+    let id = Uuid::new_v4().to_string();
+    let debate = Debate {
+        id: id.clone(),
+        title: payload.title.trim().to_string(),
+        participant_count: 0,
+        created_at: chrono::Utc::now().to_rfc3339(),
+        is_active: true,
+    };
+
+    // add to storage
+    {
+        let mut debates_map = debates.lock().unwrap();
+        debates_map.insert(id.clone(), debate.clone());
+    }
+
+    println!("Created debate: ", debate.title, debate.id);
+    return Ok(Json(debate));
+}
+
+// join debate
+async fn join_debate(
+    Path(id): Path<String>,
+    State(debates): State<AppState>,
+) -> Result<Json<Debate>, StatusCode> {
+    let mut debates_map = debates.lock().unwrap();
+    // match is a type-safe if condition that either returns successful (Some("name of returned obj") =>) or failure (None =>)
+    match debates_map.get_mut(&id) {
+        Some(debate) => {
+            if debate.participant_count >= MAX_PARTICIPANTS {
+                return Err(StatusCode::CONFLICT); // debate is full
+            }
+            debate.participant_count += 1;
+            println!("User joined debate: ", debate.title, debate.id);
+            Ok(Json(debate.clone()))
+        }
+        None => Err(StatusCode::NOT_FOUND),
+    }
+}
+
+// WebSocket handler
+async fn websocket_handler(
+    Path(debate_id): Path<String>,
+    ws: WebSocketUpgrade,
+    // impl: allows return of any type that implements (IntoResponse) in this case
+) -> impl IntoResponse {
+    println!("WebSocket connection request for debate: ", debate_id);
+
+    // TODO: implement webrtc signaling
 }

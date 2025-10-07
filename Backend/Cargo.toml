@@ -32,3 +32,6 @@ tokio-tungstenite = "0.20"
 
 # Stream utils for WebSocket
 futures-util = "0.3"
+
+# Adds time functionality
+chrono = { version = "0.4", features = ["serde] }
