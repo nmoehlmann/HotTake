@@ -39,6 +39,8 @@ function HomePage() {
         setIsModalOpen(false)
         setSelectedDebate(null)
     }
+
+
     
     return (
         <div className="container">
