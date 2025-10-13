@@ -4,7 +4,7 @@ const api = API_BASE_URL
 class DebatesService {
     async getAllDebates() {
         const res = await fetch(`${api}/debates`)
-        if (!reponse.ok) throw new Error('Failed to get debates')
+        if (!res.ok) throw new Error('Failed to get debates')
         return res.json()
     }
 
@@ -22,7 +22,7 @@ class DebatesService {
             },
             body: JSON.stringify(debateData)
         })
-        if (!Response.ok) throw new Error('Failed to create debate')
+        if (!res.ok) throw new Error('Failed to create debate')
         return res.json()
     }
 
@@ -37,3 +37,5 @@ class DebatesService {
         return res.ok
     }
 }
+
+export const debatesService = new DebatesService()

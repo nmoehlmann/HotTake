@@ -1,10 +1,11 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FaPlus, FaUser } from 'react-icons/fa'
 import '../styles/HomePage.css'
 import '../styles/BaseStyles.css'
 import { currentUser } from "../GlobalState"
 import { allDebates } from "../GlobalState"
+import { debatesService } from "../services/DebatesService"
 
 // model imports
 import User from '../models/User'
@@ -15,6 +16,9 @@ import ConfirmationModal from '../components/ConfirmationModal'
 
 function HomePage() {
     const navigate = useNavigate() // setup navigate
+
+    // debate state
+    const [debates, setDebates] = useState([])
 
     // modal state
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -40,7 +44,23 @@ function HomePage() {
         setSelectedDebate(null)
     }
 
+    useEffect(() => {
+        const getAllDebates = async () => {
+            setIsLoading(true)
+            setError('')
+            try {
+                const data = await debatesService.getAllDebates()
+                setDebates(data)
+            } catch (err) {
+                console.error('Failed to fetch debates:', err)
+                setError('Failed to load debates. Please try again later.')
+            } finally {
+                setIsLoading(false)
+            }
+        }
 
+        getAllDebates()
+    }, [])
     
     return (
         <div className="container">
@@ -49,11 +69,12 @@ function HomePage() {
             </header>
             <main className="main">
                 <div className="debates-list">
-                    {allDebates.map(debate => (
+                    {debates.map(debate => (
                         <div key={debate.id} onClick={() => {handleDebateClick(debate)}}>
                             <DebateCard
                                 title={debate.title}
-                                participantCount={debate.participantCount}
+                                participantCount={debate.participant_count}
+                                created_at={debate.created_at}
                             />
                         </div>))}
                 </div>

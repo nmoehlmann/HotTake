@@ -5,6 +5,9 @@ import { BsFillCameraVideoOffFill, BsFillCameraVideoFill, BsMicFill, BsMicMuteFi
 import { FaPhoneSlash } from 'react-icons/fa6'
 import { FaTimes } from 'react-icons/fa'
 
+// service imports
+import { debatesService } from '../services/DebatesService'
+
 // global imports
 import { allDebates } from '../GlobalState'
 import { currentUser } from '../GlobalState'
@@ -13,7 +16,12 @@ function DebatePage() {
     const navigate = useNavigate()
     const { debateId } = useParams() // gets ID from URL
 
+    // error and load state
+    const [error, setError] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
+
     const [debate, setDebate] = useState(null)
+
     // controls state
     const [isMuted, setIsMuted] = useState(false)
     const [isVideoOn, setIsVideoOn] = useState(true)
@@ -31,8 +39,21 @@ function DebatePage() {
     useEffect(() => {
         // todo: replace with API call getting debate by id from server
 
-        const foundDebate = allDebates.find(d => d.id === parseInt(debateId))
-        setDebate(foundDebate)
+        const getDebateById = async (debateId) => {
+            setError('')
+            setIsLoading(false)
+            try {
+                const debate = await debatesService.getDebateById(debateId)
+                setDebate(debate)
+            } catch (err) {
+                console.error('Failed to get debate by id', err)
+                setError('Failed to load debate. Please try again later')
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        getDebateById(debateId)
     }, [debateId])
 
     const handleLeaveDebate = () => {

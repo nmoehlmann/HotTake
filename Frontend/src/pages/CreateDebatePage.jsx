@@ -1,7 +1,8 @@
 import '../styles/CreateDebatePage.css'
-import { FaArrowLeft, FaBan, FaCheck } from 'react-icons/fa'
+import { FaArrowLeft, FaBan, FaCheck, FaSpinner } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { debatesService } from '../services/DebatesService'
 
 function CreateDebatePage() {
     const navigate = useNavigate()
@@ -21,15 +22,28 @@ function CreateDebatePage() {
         }))
     }
 
-    const handleSave = () => {
+    const handleSave = async () => {
         // validate data
-        if (!formData.title || formData.trim() === '') {
+        if (!formData.title || formData.title.trim() === '') {
             setError('Title is required')
             return
         }
 
-        // todo: creates a debate in server and navigates to created debate
-        navigate('/')
+        try {
+            setIsLoading(true)
+            setError('')
+
+            // test spinner
+            // return new Promise(resolve => setTimeout(resolve, 5000))
+            const newDebate = await debatesService.createDebate(formData)
+
+            // navigate to new debate
+            navigate(`/debate/${newDebate.id}`)
+        } catch (err) {
+            console.error('Failed to create debate', err)
+            setError('Failed to create debate. Please try again.')
+            setIsLoading(false)
+        }
     }
 
     const handleDiscard = () => {
@@ -60,6 +74,8 @@ function CreateDebatePage() {
                             maxLength="25"
                             onChange={(e) => handleInputChange('title', e.target.value)} />
                     </div>
+
+                    {error && <div className='error-message'>{error}</div>}
                 </form>
             </main>
             <footer className='create-debate-footer-container'>
@@ -68,9 +84,21 @@ function CreateDebatePage() {
                         <FaBan />
                         <p className='btn-label'>Discard</p>
                     </button>
-                    <button className='save-btn' onClick={handleSave}>
-                        <FaCheck />
-                        <p className='btn-label'>Submit</p>
+                    <button 
+                        className='save-btn' 
+                        onClick={handleSave}
+                        disabled={isLoading}>
+                        {isLoading ? (
+                            <>
+                                <FaSpinner className='spinner' />
+                                <p className='btn-label'>Creating</p>
+                            </>
+                        ) : (
+                            <>
+                                <FaCheck />
+                                <p className='btn-label'>Submit</p>
+                            </>
+                        )}
                     </button>
                 </section>
             </footer>

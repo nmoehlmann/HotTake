@@ -1,0 +1,2 @@
+fn(State<Arc<AppState>>, Json<CreateDebateRequest>) -> impl std::future::Future<Output = Result<Json<Debate>, axum::http::StatusCode>> {create_debate}
+fn(State<Arc<AppState>>, Json<CreateDebateRequest>) -> impl std::future::Future<Output = Result<Json<Debate>, axum::http::StatusCode>> {create_debate}: Handler<_, _>
