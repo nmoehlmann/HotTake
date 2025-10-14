@@ -1,17 +1,22 @@
 import { API_BASE_URL } from "../GlobalState"
+import Debate from "../models/Debate"
 const api = API_BASE_URL
 
 class DebatesService {
     async getAllDebates() {
         const res = await fetch(`${api}/debates`)
         if (!res.ok) throw new Error('Failed to get debates')
-        return res.json()
+        const data = await res.json()
+        const debates = data.map(d => new Debate(d))
+        return debates
     }
 
     async getDebateById(id) {
         const res = await fetch(`${api}/debates/${id}`)
         if (!res.ok) throw new Error('Failed to get debate by id')
-        return res.json()
+        const data = await res.json()
+        const debate = new Debate(data)
+        return debate
     }
 
     async createDebate(debateData) {
@@ -23,7 +28,9 @@ class DebatesService {
             body: JSON.stringify(debateData)
         })
         if (!res.ok) throw new Error('Failed to create debate')
-        return res.json()
+        const data = res.json()
+        const newDebate = new Debate(data)
+        return newDebate
     }
 
     async deleteDebate(id) {
@@ -34,7 +41,9 @@ class DebatesService {
             }
         })
         if (!res.ok) throw new Error('Failed to delete debate')
-        return res.ok
+        const data = res.json()
+        const newDebate = new Debate(data)
+        return newDebate
     }
 }
 
