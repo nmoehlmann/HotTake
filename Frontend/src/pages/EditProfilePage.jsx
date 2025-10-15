@@ -3,6 +3,7 @@ import { FaArrowLeft, FaVenus, FaMars, FaGenderless, FaCheck, FaBan } from 'reac
 import { useNavigate } from 'react-router-dom'
 import { currentUser } from '../GlobalState'
 import { useState, useEffect } from 'react'
+import { userService } from '../services/UserService'
 
 
 function EditProfilePage() {
@@ -60,6 +61,10 @@ function EditProfilePage() {
 
         // updates the global currentUser with local form data
         Object.assign(currentUser, saveData) // NOTE: cannot directly assign imported object
+
+        // save profile data locally
+        userService.updateUserProfile(saveData)
+
         navigate('/')
     }
 

@@ -73,7 +73,7 @@ function HomePage() {
                         <div key={debate.id} onClick={() => {handleDebateClick(debate)}}>
                             <DebateCard
                                 title={debate.title}
-                                participantCount={debate.participant_count}
+                                participantCount={debate.participantCount}
                                 created_at={debate.created_at}
                             />
                         </div>))}

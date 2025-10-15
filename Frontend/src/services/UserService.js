@@ -1,45 +1,32 @@
 import { API_BASE_URL } from "../GlobalState"
+
+
 const api = API_BASE_URL
+const USER_STORAGE_KEY = 'hottake_user_profile'
 
 class UserService {
-    async CreateUser(userData) {
-        const res = await fetch(`${api}/users`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData)
-        })
-        if (!res.ok) throw new Error('Failed to create user')
-        return res.json()
+
+    getUserProfile() {
+        const userData = localStorage.getItem(USER_STORAGE_KEY)
+        return userData ? JSON.parse(userData) : null
     }
 
-    async UpdateUser(userData) {
-        const res = await fetch(`${api}/users`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData)
-        })
-        if (!res.ok) throw new Error('Failed to update user')
-        return res.json()
+    saveUserProfile(userData) {
+        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData))
+        return userData
     }
 
-    async DeleteUser(uid) {
-        const res = await fetch(`${api}/users/${uid}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        if (!res.ok) throw new Error('Failed to delete user')
-        return res.ok
+    updateUserProfile(userData) {
+        const currentUser = this.getUserProfile()
+
+        const updatedUser = {
+            ...currentUser,
+            ...userData,
+            id: currentUser ? currentUser.id : 
+        }
     }
 
-    async GetUserById(uid) {
-        const res = await fetch(`${api}/users/${uid}`)
-        if (!res.ok) throw new Error('Failed to get user by id')
-        return res.json()
-    }
+
 }
+
+export const userService = new UserService()

@@ -10,6 +10,15 @@ class Debate {
     formattedDate() {
         return this.created_at.toLocaleDateString()
     }
+
+    // participantCount() {
+    //     return this.participants.length
+    // }
+
+    // instead of method, this retrieves the participant count as a property would
+    get participantCount() {
+        return Object.keys(this.participants).length
+    }
 }
 
 export default Debate
