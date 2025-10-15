@@ -3,7 +3,7 @@ import User from "./models/User";
 const API_BASE_URL = 'http://localhost:3000/api'
 export { API_BASE_URL }
 
-let currentUser = new User({name: "John Doe", age: null, gender: null})
+let currentUser = new User({name: '', age: '', gender: ''})
 export { currentUser }
 
 let allDebates = [

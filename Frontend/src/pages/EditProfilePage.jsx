@@ -1,7 +1,6 @@
 import '../styles/EditProfilePage.css'
 import { FaArrowLeft, FaVenus, FaMars, FaGenderless, FaCheck, FaBan } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
-import { currentUser } from '../GlobalState'
 import { useState, useEffect } from 'react'
 import { userService } from '../services/UserService'
 
@@ -11,21 +10,32 @@ function EditProfilePage() {
 
     // local state form form
     const [formData, setFormData] = useState({
-        name: currentUser.name,
-        age: currentUser.age,
-        gender: currentUser.gender
+        name: '',
+        age: '',
+        gender: ''
+    })
+    const [user, setUser] = useState({
+        name: '',
+        age: '',
+        gender: ''
     })
 
     /* currently redundant but will be needed when currentUser is changed externally.
      * useEffect is called whenever currentUser changes.
     */
     useEffect(() => {
-        setFormData({
-            name: currentUser.name,
-            age: currentUser.age,
-            gender: currentUser.gender
-         })
-    }, [currentUser])
+        // load user data from localstorage
+        const userData = userService.getUserProfile()
+        setUser(userData)
+
+        if (userData) {
+            setFormData({
+                name: userData.name || '',
+                age: userData.age || '',
+                gender: userData.gender || ''
+            })
+        }
+    }, [])
 
     // 
     const handleInputChange = (field, value) => {
@@ -36,7 +46,9 @@ function EditProfilePage() {
         }))
     }
 
-    const handleSave = () => {
+    const handleSave = (e) => {
+        e.preventDefault()
+
         // checks name
         if (!formData.name || formData.name.trim() === '') {
             alert('Name is required')
@@ -55,25 +67,27 @@ function EditProfilePage() {
         // convert empty strings to null for save
         const saveData = {
             name: formData.name.trim(),
-            age: formData.age && formData.age !== '' ? parseInt(formData.age) : null,
-            gender: formData.gender || null
+            age: formData.age && formData.age !== '' ? parseInt(formData.age) : '',
+            gender: formData.gender || ''
         }
 
-        // updates the global currentUser with local form data
-        Object.assign(currentUser, saveData) // NOTE: cannot directly assign imported object
+        // update user profile
+        const updatedUser = userService.updateUserProfile(saveData)
 
-        // save profile data locally
-        userService.updateUserProfile(saveData)
+        // update local state
+        setUser(updatedUser)
 
         navigate('/')
     }
 
-    const handleDiscard = () => {
+    const handleDiscard = (e) => {
+        e.preventDefault()
+
         // resets form to original user data
         setFormData({
-            name: currentUser.name,
-            age: currentUser.age,
-            gender: currentUser.gender
+            name: user.name || '',
+            age: user.age || '',
+            gender: user.gender || ''
         })
         navigate('/')
     }
