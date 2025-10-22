@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { userService } from './services/UserService'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
 
@@ -9,6 +10,14 @@ import EditProfilePage from './pages/EditProfilePage'
 import CreateDebatePage from './pages/CreateDebatePage'
 
 function App() {
+  // initialize user profile on app load
+  useEffect(() => {
+    const profileInitialized = userService.initializeUserProfile()
+    if (!profileInitialized) {
+      console.log("No profile was found in localstorage. User needs to create a profile.")
+    }
+  }, [])
+
   return (
     <Router>
       <div className="app">

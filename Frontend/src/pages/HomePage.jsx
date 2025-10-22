@@ -33,8 +33,11 @@ function HomePage() {
         setIsModalOpen(true)
     }
 
-    const handleJoinDebate = () => {
+    const handleJoinDebate = async () => {
         console.log(`joining debate ${selectedDebate.title}`)
+        // call join debate function from backend
+        await debatesService.joinDebate(selectedDebate.id)
+        
         navigate(`/debate/${selectedDebate.id}`)
         setIsModalOpen(false)
     }

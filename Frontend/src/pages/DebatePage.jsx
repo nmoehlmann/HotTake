@@ -27,14 +27,17 @@ function DebatePage() {
     const [isVideoOn, setIsVideoOn] = useState(true)
     const [fullscreenUser, setFullscreenUser] = useState(null)
 
-    const [participants, setParticipants] = useState([
-        { id: 1, name: 'Alice', age: 22, gender: "female" },
-        { id: 2, name: 'Bob', age: null, gender: null },
-        { id: 3, name: 'Charlie', age: 25, gender: null },
-        { id: 4, name: 'Diana', age: null, gender: "other" },
-        { id: 5, name: 'Eve', age: 80, gender: "female" },
-        { id: 6, name: 'Frank', age: 25, gender: "male" },
-    ])
+    // hardcoded mock participants
+    // const [participants, setParticipants] = useState([
+    //     { id: 1, name: 'Alice', age: 22, gender: "female" },
+    //     { id: 2, name: 'Bob', age: null, gender: null },
+    //     { id: 3, name: 'Charlie', age: 25, gender: null },
+    //     { id: 4, name: 'Diana', age: null, gender: "other" },
+    //     { id: 5, name: 'Eve', age: 80, gender: "female" },
+    //     { id: 6, name: 'Frank', age: 25, gender: "male" },
+    // ])
+
+    const [participants, setParticipants] = useState([])
 
     useEffect(() => {
         // todo: replace with API call getting debate by id from server

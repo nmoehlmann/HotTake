@@ -4,6 +4,29 @@ import Debate from "../models/Debate"
 const api = API_BASE_URL
 
 class DebatesService {
+
+    async joinDebate(debateId) {
+        const user = {
+            user_id: currentUser.id,
+            user_name: currentUser.name,
+            user_age: currentUser.age,
+            user_gender: currentUser.gender
+        }
+
+        const res = await fetch(`${api}/debates/${debateId}/join`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user)
+        })
+
+        if (!res.ok) throw new Error('Failed to join debate')
+        const data = await res.json()
+        const debate = new Debate(data)
+        return debate
+    }
+
     async getAllDebates() {
         const res = await fetch(`${api}/debates`)
         if (!res.ok) throw new Error('Failed to get debates')
@@ -37,7 +60,7 @@ class DebatesService {
             body: JSON.stringify(debateData)
         })
         if (!res.ok) throw new Error('Failed to create debate')
-        const data = res.json()
+        const data = await res.json()
         const newDebate = new Debate(data)
         return newDebate
     }
@@ -50,7 +73,7 @@ class DebatesService {
             }
         })
         if (!res.ok) throw new Error('Failed to delete debate')
-        const data = res.json()
+        const data = await res.json()
         const newDebate = new Debate(data)
         return newDebate
     }

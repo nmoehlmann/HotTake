@@ -13,6 +13,7 @@ class UserService {
         return userData ? JSON.parse(userData) : null
     }
 
+    // this is a helper function for updateUserProfile
     saveUserProfile(userData) {
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData))
     }
@@ -21,10 +22,10 @@ class UserService {
         const origUser = this.getUserProfile()
 
         const updatedUser = {
-            id: origUser.id ? origUser.id : uuidv4(),
-            name: newUserData.name ? newUserData.name : origUser.name,
-            age: newUserData.age ? newUserData.age : origUser.age,
-            gender: newUserData ? newUserData.gender : origUser.gender
+            id: origUser?.id ? origUser.id : uuidv4(),
+            name: newUserData?.name ? newUserData.name : origUser?.name,
+            age: newUserData?.age ? newUserData.age : origUser?.age,
+            gender: newUserData ? newUserData.gender : origUser?.gender
         }
 
         // no need to recode this
@@ -32,6 +33,16 @@ class UserService {
 
         // updates the global currentUser with local form data
         Object.assign(currentUser, updatedUser) // NOTE: cannot directly assign imported object
+    }
+
+    // initializes the user profile, used in app.jsx
+    initializeUserProfile() {
+        const storedUser = this.getUserProfile()
+        if (storedUser) {
+            Object.assign(currentUser, storedUser)
+            return true
+        }
+        return false
     }
 
     clearUserProfile() {
