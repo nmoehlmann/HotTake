@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../GlobalState"
+import { currentUser } from "../GlobalState"
 import Debate from "../models/Debate"
 const api = API_BASE_URL
 
@@ -20,6 +21,14 @@ class DebatesService {
     }
 
     async createDebate(debateData) {
+        debateData = {
+            title: debateData.title,
+            owner_id: currentUser.id,
+            owner_name: currentUser.name,
+            owner_age: currentUser.age,
+            owner_gender: currentUser.gender
+        }
+        
         const res = await fetch(`${api}/debates`, {
             method: 'POST',
             headers: {
